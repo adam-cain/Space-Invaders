@@ -34,4 +34,9 @@ public class Player extends GameObject implements Moving, Shooting{
     public GameObject getThis() {
         return this;
     }
+
+    @Override
+    public void handleCollision() {
+        
+    }
 }

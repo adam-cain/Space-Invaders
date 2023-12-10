@@ -9,7 +9,6 @@ import interfaces.Collidable;
 import util.Image;
 
 public class Bunker {
-
     private List<BunkerCube> cubes;
 
     public Bunker(int x, int y, BunkerShape shape) {
@@ -30,7 +29,7 @@ public class Bunker {
         }
     }
 
-    private class BunkerCube extends GameObject implements Collidable{
+    private static class BunkerCube extends GameObject implements Collidable{
         private static Image spritePath = new Image("src/assets/bunkerCube.png", 40, 40);
         public BunkerCube(int x, int y) {
             super(x, y, spritePath);

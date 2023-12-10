@@ -1,6 +1,6 @@
 package gameObjects.BunkerObjects.BunkerShapes;
 
-abstract class BunkerShape {
+public abstract class BunkerShape {
     private int[][] shapeMatrix;
 
     public BunkerShape(int[][] matrix) {

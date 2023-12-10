@@ -27,4 +27,9 @@ public abstract class Alien extends GameObject implements Moving, Collidable{
     public boolean isAlive() {
         return isAlive;
     }
+
+    @Override
+    public void handleCollision(){
+        this.isAlive = false;
+    }
 }

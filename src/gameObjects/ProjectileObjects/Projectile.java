@@ -8,15 +8,17 @@ public class Projectile extends GameObject implements Moving {
 
     private ProjectileBehavior behavior;
     private GameObject shooter;
+    private int projectileSpeed;
 
-    public Projectile(int xPosition, int yPosition, ProjectileBehavior behavior, Image sprite, GameObject shooter) {
+    public Projectile(int xPosition, int yPosition, ProjectileBehavior behavior, int projectileSpeed,Image sprite, GameObject shooter) {
         super(xPosition, yPosition, sprite);
         this.behavior = behavior;
         this.shooter = shooter;
+        this.projectileSpeed = projectileSpeed;
     }
 
     public void update() {
-        behavior.execute(this);
+        behavior.execute(this, projectileSpeed);
     }
 
     public GameObject getShooter() {
