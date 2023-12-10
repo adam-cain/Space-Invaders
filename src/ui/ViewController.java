@@ -3,12 +3,12 @@ import java.awt.Dimension;
 
 import util.Image;
 
-public class GraphicsController {
-    private static GraphicsController instance;
+public class ViewController {
+    private static ViewController instance;
 
-    public static GraphicsController getInstance() {
+    public static ViewController getInstance() {
         if (instance == null) {
-            instance = new GraphicsController();
+            instance = new ViewController();
         }
         return instance;
     }

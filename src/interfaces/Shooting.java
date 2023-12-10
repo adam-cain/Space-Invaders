@@ -1,10 +1,10 @@
 package interfaces;
 
-import gameObjects.Projectile;
 import gameObjects.GameObject;
+import gameObjects.ProjectileObjects.Projectile;
 import util.ProjectileDirection;
 
-public interface Shootable extends Collidable{
+public interface Shooting extends Collidable{
     int getProjectileSpeed();
     ProjectileDirection getProjectileDirection();
     GameObject getThis();

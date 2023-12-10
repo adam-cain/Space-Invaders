@@ -6,12 +6,12 @@ import java.util.List;
 import factory.UFO;
 import gameObjects.Player;
 import gameObjects.AlienObjects.Alien;
+import gameObjects.BunkerObjects.Bunker;
 import handler.CollisionHandler;
 import handler.Handler;
 import handler.InputHandler;
 import handler.SoundManager;
 import handler.GameEvents.GameEvent;
-import gameObjects.Bunker;
 import interfaces.EventHandler;
 import interfaces.Projectile;
 

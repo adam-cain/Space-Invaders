@@ -2,9 +2,9 @@ package gameObjects; // Update this to match your new package structure
 
 import util.ProjectileDirection;
 import util.Image; 
-import interfaces.Movable;
-import interfaces.Shootable;
-public class Player extends GameObject implements Movable, Shootable{
+import interfaces.Moving;
+import interfaces.Shooting;
+public class Player extends GameObject implements Moving, Shooting{
     private static Image sprite = new Image("src/assets/player.png", 40, 40);
     private int moveSpeed = 5;
 

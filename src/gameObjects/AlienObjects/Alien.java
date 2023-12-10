@@ -2,10 +2,10 @@ package gameObjects.AlienObjects;
 
 import gameObjects.GameObject;
 import interfaces.Collidable;
-import interfaces.Movable;
+import interfaces.Moving;
 import util.Image;
 
-public abstract class Alien extends GameObject implements Movable, Collidable{
+public abstract class Alien extends GameObject implements Moving, Collidable{
     protected int points;
     protected boolean isAlive;
 

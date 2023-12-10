@@ -1,16 +1,16 @@
 package handler.GameEvents;
 
-import interfaces.Shootable;
+import interfaces.Shooting;
 
 public class ShootEvent extends GameEvent {
-    private Shootable source;
+    private Shooting source;
 
-    public ShootEvent(Shootable source) {
+    public ShootEvent(Shooting source) {
         super(EventType.COLLISION);
         this.source = source;
     }
 
-    public Shootable getSource() {
+    public Shooting getSource() {
         return source;
     }
 }

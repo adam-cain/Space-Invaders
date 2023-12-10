@@ -6,9 +6,9 @@ import java.util.Random;
 
 import factory.AlienFactory;
 import factory.types.AlienType;
-import gameObjects.Projectile;
 import gameObjects.AlienObjects.ShootingAlien;
-import ui.GraphicsController;
+import gameObjects.ProjectileObjects.Projectile;
+import ui.ViewController;
 
 public class AlienSwarm {
     private List<ShootingAlien> aliens;
@@ -57,7 +57,7 @@ public class AlienSwarm {
     }
 
     public void moveSwarm() {
-        GraphicsController gc = GraphicsController.getInstance();
+        ViewController gc = ViewController.getInstance();
         Dimension windowSize = gc.getWindowSize();
 
         int yDirection = 0;

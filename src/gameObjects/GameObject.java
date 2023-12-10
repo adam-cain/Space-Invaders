@@ -2,7 +2,7 @@ package gameObjects;
 import java.awt.Dimension;
 
 import interfaces.Positionable;
-import ui.GraphicsController;
+import ui.ViewController;
 import util.Image;
 
 public abstract class GameObject implements Positionable{
@@ -50,7 +50,7 @@ public abstract class GameObject implements Positionable{
     }
 
     public void draw() {
-        GraphicsController gc = GraphicsController.getInstance();
+        ViewController gc = ViewController.getInstance();
         gc.drawImage(sprite, x, y);
     }
 }
