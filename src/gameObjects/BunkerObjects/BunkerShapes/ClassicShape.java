@@ -11,4 +11,3 @@ public class ClassicShape extends BunkerShape {
         });
     }
 }
-
