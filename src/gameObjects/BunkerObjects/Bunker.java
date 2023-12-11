@@ -5,6 +5,7 @@ import java.util.List;
 
 import gameObjects.GameObject;
 import gameObjects.BunkerObjects.BunkerShapes.BunkerShape;
+import gameObjects.ProjectileObjects.Projectile;
 import interfaces.Collidable;
 import util.Image;
 
@@ -29,15 +30,26 @@ public class Bunker {
         }
     }
 
-    private static class BunkerCube extends GameObject implements Collidable{
-        private static Image spritePath = new Image("src/assets/bunkerCube.png", 40, 40);
+    public void checkCollisions(Projectile projectile){
+        for (BunkerCube bunkerCube : cubes) {
+            if (bunkerCube.collides(projectile)) {
+                cubes.remove(bunkerCube);
+            }
+        }
+    }
+
+    public void update(){
+        for (BunkerCube bunkerCube : cubes) {
+            bunkerCube.draw();
+        }
+    }
+
+    class BunkerCube extends GameObject implements Collidable{
         public BunkerCube(int x, int y) {
-            super(x, y, spritePath);
+            super(x, y, new Image("src/assets/bunkerCube.png", 40, 40));
         }
 
         @Override
-        public void handleCollision() {
-            
-        }
+        public void handleCollision() {}
     }
 }

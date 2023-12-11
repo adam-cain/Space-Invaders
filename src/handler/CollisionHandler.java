@@ -1,31 +1,36 @@
 package handler;
 
-import handler.GameEvents.CollisionEvent;
-import handler.GameEvents.GameEvent;
-import interfaces.EventHandler;
+import gameObjects.ProjectileObjects.Projectile;
+import interfaces.Collidable;
+import interfaces.Handler;
 
-public class CollisionHandler implements EventHandler {
-    private EventHandler nextHandler;
+class CollisionPair {
+    private Projectile projectile;
+    private Collidable object2;
 
-    // Private constructor to prevent instantiation from outside
-    private CollisionHandler(EventHandler nextHandler) {
-        this.nextHandler = nextHandler;
-    }
-
-
-    @Override
-    public void handleEvent(GameEvent event) {
-        if (event instanceof CollisionEvent) {
-            // Handle the collision event
-            handleCollision((CollisionEvent) event);
-        } else if (nextHandler != null) {
-            // Delegate to the next handler if this handler cannot process the event
-            nextHandler.handleEvent(event);
-        }
-    }
-
-    // Method to handle collision events
-    private void handleCollision(CollisionEvent event) {
-        
+    public CollisionPair(Projectile projectile, Collidable object2) {
+        this.projectile = projectile;
+        this.object2 = object2;
     }
 }
+
+public class CollisionHandler implements Handler<CollisionPair> {
+    private Handler<CollisionPair> next;
+    
+    @Override
+    public void setNext(Handler<CollisionPair> next) {
+        this.next = next;
+    }
+
+    @Override
+    public boolean handleInput(CollisionPair input) {
+        // Handle the collision
+        return true;
+    }
+
+    @Override
+    public Handler<CollisionPair> getNext() {
+        return next;
+    }
+}
+

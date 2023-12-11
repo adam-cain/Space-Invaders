@@ -3,45 +3,50 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
+import factory.GameObjectFactory;
 import gameObjects.Player;
 import gameObjects.AlienObjects.Alien;
+import gameObjects.AlienObjects.UFO;
 import gameObjects.BunkerObjects.Bunker;
+import gameObjects.ProjectileObjects.Projectile;
 import handler.CollisionHandler;
-import handler.InputHandler;
 import handler.SoundManager;
-import handler.GameEvents.GameEvent;
-import interfaces.EventHandler;
+import handler.InputHandlers.InputHandler;
+import ui.Scoreboard;
+import ui.ViewController;
 
 
 public class Game {
     private static Game instance;
+
+    //Game objects
     private Player player;
     private AlienSwarm alienSwarm;
     private List<Projectile> projectiles;
-    private Scoreboard scoreboard;
+    private List<Bunker> bunkers;
+    private UFO ufo;
+
+    //Game states
     private boolean isGameOver;
     private int currentLevel;
-    private UFO ufo; // Assuming there's a UFO class.
-    private List<Bunker> bunkers;
+    private int score;
+    private int lives;
+
+    //UI
+    private ViewController viewController;
+    private Scoreboard scoreboard;
 
     private CollisionHandler collisionHandler;
 
     private Game() {
-        this.player = new Player();
-        this.currentLevel = 1;
+        this.player = GameObjectFactory.createPlayer();
         this.alienSwarm = new AlienSwarm(currentLevel);
         this.projectiles = new ArrayList<>();
         this.scoreboard = new Scoreboard();
-        this.collisionHandler = CollisionHandler.getInstance();
+        this.currentLevel = 1;
+        this.score = 0;
+        this.lives = 3;
         this.isGameOver = false;
-
-        EventHandler inputHandler = new InputHandler(collisionHandler);
-        EventHandler collisionHandler = new CollisionHandler(soundManager);
-        EventHandler soundManager = new SoundManager();
-    }
-
-    public void fireEvent(GameEvent event) {
-        chain.handleRequest(event);
     }
 
     // Public static method to get the instance
@@ -59,9 +64,8 @@ public class Game {
     public void startGame() {
         // Initialize or reset game components
         player.reset();
-        alienSwarm.reset();
+        alienSwarm = new AlienSwarm(currentLevel);
         projectiles.clear();
-        scoreboard.reset();
         isGameOver = false;
         currentLevel = 1;
 
@@ -72,6 +76,7 @@ public class Game {
     private void mainGameLoop() {
         while (!isGameOver) {
             // Game loop operations
+            //Update Objects
             updateGameObjects();
             checkCollisions();
             handlePlayerInput(); // This would be linked to actual player input in the game framework
@@ -79,6 +84,12 @@ public class Game {
             checkEndOfLevel();
             checkGameOver();
             // Add a sleep or delay based on your game framework to control the loop timing
+            //Clear Display
+            viewController.clearDisplay();
+
+            //Draw
+            scoreboard.updateScoreboard(score, lives);
+
         }
         endGame();
     }
@@ -97,15 +108,15 @@ public class Game {
     }
 
     private void checkGameOver() {
-        if (player.getLives() <= 0 || alienSwarm.hasReachedBase()) {
+        if (!player.isAlive() || alienSwarm.swarmReachedBottom()) {
             isGameOver = true;
         }
     }
 
     private void startNextLevel() {
         // Prepare the game for the next level
-        alienSwarm.reset();
-        shields.forEach(Shield::repair);
+        alienSwarm = new AlienSwarm(currentLevel);
+        //reset bunkers
         // More level initialization as needed
     }
 
@@ -115,14 +126,17 @@ public class Game {
 
     private void updateGameObjects() {
         // Update the player, aliens, and projectiles
-        player.updatePlayer(); // Assuming there's an updatePlayer() method in the Player class
-        alienSwarm.updateAliens(); // Assuming there's an updateAliens() method in the AlienSwarm class
+
+        for (Projectile projectile : projectiles) {
+            projectile.update();
+        }
+        alienSwarm.moveSwarm(); // Assuming there's an updateAliens() method in the AlienSwarm class
         projectiles.removeIf(projectile -> projectile.isOutOfBounds());
     }
 
     private void checkCollisions() {
         // Handle collisions
-        CollisionDetector.detectAndHandleCollisions(player, alienSwarm, shields, projectiles, scoreboard);
+        //CollisionDetector.detectAndHandleCollisions(player, alienSwarm, projectiles, bunkers);
     }
 
     private void handlePlayerInput() {

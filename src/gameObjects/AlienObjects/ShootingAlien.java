@@ -1,9 +1,10 @@
 package gameObjects.AlienObjects;
 
 import gameObjects.GameObject;
+import gameObjects.ProjectileObjects.ProjectileBehaviour.DownwardProjectileBehavior;
+import interfaces.ProjectileBehavior;
 import interfaces.Shooting;
 import util.Image;
-import util.ProjectileDirection;
 
 public abstract class ShootingAlien extends Alien implements Shooting{
     public ShootingAlien(int xPosition, int yPosition, Image sprite, int points) {
@@ -11,12 +12,17 @@ public abstract class ShootingAlien extends Alien implements Shooting{
     }
 
     @Override
-    public ProjectileDirection getProjectileDirection(){
-        return ProjectileDirection.DOWN;
+    public GameObject getThis(){
+        return this;
     }
 
     @Override
-    public GameObject getThis(){
-        return this;
+    public ProjectileBehavior getProjectileBehavior() {
+        return new DownwardProjectileBehavior();
+    }
+
+    @Override
+    public Image getSprite() {
+        return new Image("src/assets/alienProjectile.png", 10, 40);
     }
 }

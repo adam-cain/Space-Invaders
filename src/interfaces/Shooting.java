@@ -1,17 +1,21 @@
 package interfaces;
 
+import core.Game;
+import factory.GameObjectFactory;
 import gameObjects.GameObject;
 import gameObjects.ProjectileObjects.Projectile;
-import util.ProjectileDirection;
+import util.Image;
 
 public interface Shooting extends Collidable{
     int getProjectileSpeed();
-    ProjectileDirection getProjectileDirection();
     GameObject getThis();
-    default public Projectile shoot() {
+    ProjectileBehavior getProjectileBehavior();
+    Image getSprite();
+    default public void shoot() {
         if(getProjectileSpeed() > 0){
-            return new Projectile(getX(), getY(), getProjectileSpeed() ,getProjectileDirection(), getThis());
+            Projectile projectile = GameObjectFactory.createProjectile(getY(), getX(), getProjectileSpeed(), getProjectileBehavior(), getSprite(), getThis());
+            Game game = Game.getInstance();
+            game.addProjectile(projectile);
         }
-        return null;
     }
 }

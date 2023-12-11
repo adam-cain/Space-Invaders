@@ -7,7 +7,6 @@ import java.util.Random;
 import factory.AlienFactory;
 import factory.types.AlienType;
 import gameObjects.AlienObjects.ShootingAlien;
-import gameObjects.ProjectileObjects.Projectile;
 import ui.ViewController;
 
 public class AlienSwarm {
@@ -87,16 +86,21 @@ public class AlienSwarm {
             }
         }
     }
+
+    public boolean allAliensDefeated(){
+        return aliens.isEmpty();
+    }
+
+    public boolean swarmReachedBottom() {
+        ViewController gc = ViewController.getInstance();
+        int bottomEdge = (int) gc.getWindowSize().getHeight() - 40;
+        return bottomEdgePos >= bottomEdge;
+    }
     
-    public Projectile randomshoot() {
+    public void randomShoot() {
         Random random = new Random();
         int shooterIndex = random.nextInt(aliens.size());
         ShootingAlien alien = aliens.get(shooterIndex);
-        return alien.shoot();
-    }
-
-    public void removeDeadAliens() {
-        aliens.removeIf(alien -> !alien.isAlive());
-        updateSwarmEdges();
+        alien.shoot();
     }
 }
