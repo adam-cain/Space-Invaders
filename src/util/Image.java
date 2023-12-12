@@ -1,7 +1,7 @@
 package util;
 import java.awt.Dimension; 
 
-public class Image {
+public class Image{
     private String src;
     private int width;
     private int height;

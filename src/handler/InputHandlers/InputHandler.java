@@ -11,7 +11,6 @@ enum KeyCode{
     ARROW_RIGHT,
 }
 
-
 public abstract class InputHandler implements Handler<KeyCode> {
     private Handler<KeyCode> next;
     protected Player player;

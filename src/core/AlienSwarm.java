@@ -56,8 +56,7 @@ public class AlienSwarm {
     }
 
     public void moveSwarm() {
-        ViewController gc = ViewController.getInstance();
-        Dimension windowSize = gc.getWindowSize();
+        Dimension windowSize = ViewController.getWindowSize();
 
         int yDirection = 0;
 
@@ -92,8 +91,7 @@ public class AlienSwarm {
     }
 
     public boolean swarmReachedBottom() {
-        ViewController gc = ViewController.getInstance();
-        int bottomEdge = (int) gc.getWindowSize().getHeight() - 40;
+        int bottomEdge = (int) ViewController.getWindowSize().getHeight() - 40;
         return bottomEdgePos >= bottomEdge;
     }
     

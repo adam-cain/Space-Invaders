@@ -1,6 +1,6 @@
 package gameObjects.ProjectileObjects;
-import java.awt.Dimension;
 
+import java.awt.Dimension;
 import gameObjects.GameObject;
 import interfaces.Moving;
 import interfaces.ProjectileBehavior;
@@ -29,8 +29,7 @@ public class Projectile extends GameObject implements Moving {
     }
 
     public boolean isOutOfBounds() {
-        ViewController vc = ViewController.getInstance();
-        Dimension windowSize = vc.getWindowSize();
+        Dimension windowSize = ViewController.getWindowSize();
         return getX() < 0 || getX() > windowSize.getWidth() || getY() < 0 || getY() > windowSize.getHeight();
     }
 }
