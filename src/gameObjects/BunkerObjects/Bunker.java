@@ -30,12 +30,14 @@ public class Bunker {
         }
     }
 
-    public void checkCollisions(Projectile projectile){
+    public boolean checkCollisions(Projectile projectile){
         for (BunkerCube bunkerCube : cubes) {
             if (bunkerCube.collides(projectile)) {
                 cubes.remove(bunkerCube);
+                return true;
             }
         }
+        return false;
     }
 
     public void draw(){

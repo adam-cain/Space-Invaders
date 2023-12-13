@@ -9,7 +9,7 @@ import gameObjects.Projectile;
 import gameObjects.AlienObjects.Alien;
 import gameObjects.AlienObjects.UFO;
 import gameObjects.BunkerObjects.Bunker;
-import handler.CollisionHandler;
+import handler.CollisionHandlers.*;
 import handler.InputHandlers.*;
 import ui.ScoreboardScene;
 import ui.ViewController;
@@ -74,6 +74,18 @@ public class Game {
 
     public void addProjectile(Projectile projectile) {
         projectiles.add(projectile);
+    }
+
+    public void removeProjectile(Projectile projectile) {
+        projectiles.remove(projectile);
+    }
+
+    public void addPoints(int score){
+        this.score += score;
+    }
+
+    public void removeLife(){
+        lives--;
     }
 
     public void startGame() {
@@ -197,5 +209,8 @@ public class Game {
         // This method should be connected to actual input handling in your game
         // framework
         // For example: if the left arrow key is pressed, then player.moveLeft();
+    }
+
+    public void addScore(int points) {
     }
 }
