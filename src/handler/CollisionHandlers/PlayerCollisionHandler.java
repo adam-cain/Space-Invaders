@@ -11,7 +11,7 @@ public class PlayerCollisionHandler extends CollisionHandler{
     }
 
      @Override
-    public void handleRequest(CollisionPair input) {
+    public boolean handleRequest(CollisionPair input) {
         if(input.getCollidable() instanceof Player){
             Player player = (Player) input.getCollidable();
             Projectile projectile = input.getProjectile();
@@ -19,10 +19,12 @@ public class PlayerCollisionHandler extends CollisionHandler{
                 game.removeLife();
                 player.resetPosition();
                 removeProjectile(projectile);
+                return true;
             }
         }
         else if(getNext() != null){
-            getNext().handleRequest(input);
+            return getNext().handleRequest(input);
         }
+        return false;
     }
 }

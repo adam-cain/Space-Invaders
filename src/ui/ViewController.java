@@ -69,4 +69,12 @@ public class ViewController {
                 return null;
         }
     }
+
+    public void handleMouseClick(){
+        // Stub implementation for handling mouse click
+        Dimension windowsSize = getWindowSize();
+        int x = new Random().nextInt(windowsSize.width);
+        int y = new Random().nextInt(windowsSize.height);
+        scene.handleClick(x, y);
+    }
 }

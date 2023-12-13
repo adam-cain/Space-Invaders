@@ -4,8 +4,7 @@ import core.Game;
 import gameObjects.Projectile;
 import interfaces.Handler;
 
-
-abstract public class CollisionHandler implements Handler<CollisionPair> {
+public abstract class CollisionHandler implements Handler<CollisionPair> {
 
     protected Game game;
     private Handler<CollisionPair> next;
@@ -27,4 +26,7 @@ abstract public class CollisionHandler implements Handler<CollisionPair> {
     protected void removeProjectile(Projectile projectile) {
         game.removeProjectile(projectile);
     }
+
+    @Override
+    public abstract boolean handleRequest(CollisionPair input); 
 }

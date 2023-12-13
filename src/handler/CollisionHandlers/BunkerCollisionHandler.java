@@ -11,17 +11,19 @@ public class BunkerCollisionHandler extends CollisionHandler {
     }
 
     @Override
-    public void handleRequest(CollisionPair input) {
+    public boolean handleRequest(CollisionPair input) {
         if(input.getCollidable() instanceof Bunker){
             Bunker bunker = (Bunker) input.getCollidable();
             Projectile projectile = input.getProjectile();
             if(bunker.checkCollisions(projectile)){
                 removeProjectile(projectile);
+                return true;
             }
         }
         else if(getNext() != null){
-            getNext().handleRequest(input);
+            return getNext().handleRequest(input);
         }
+        return false;
     }
     
 }

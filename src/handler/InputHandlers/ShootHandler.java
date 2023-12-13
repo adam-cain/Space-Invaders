@@ -8,11 +8,12 @@ public class ShootHandler extends InputHandler {
     }
 
     @Override
-    public void handleRequest(KeyCode request) {
+    public boolean handleRequest(KeyCode request) {
         if (request == KeyCode.SPACE) {
             player.shoot();
         } else if (getNext() != null) {
             getNext().handleRequest(request);
         }
+        return false;
     }
 }

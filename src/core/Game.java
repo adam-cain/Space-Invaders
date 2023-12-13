@@ -1,5 +1,6 @@
 package core;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import gameObjects.AlienObjects.UFO;
 import gameObjects.BunkerObjects.Bunker;
 import handler.CollisionHandlers.*;
 import handler.InputHandlers.*;
+import interfaces.Collidable;
 import ui.ScoreboardScene;
 import ui.ViewController;
 import ui.GameOverScene;
@@ -43,7 +45,6 @@ public class Game {
     private Game() {
         //Initialize game objects
         this.player = GameObjectFactory.createPlayer();
-        this.alienSwarm = new AlienSwarm(currentLevel);
         this.projectiles = new ArrayList<>();
         this.scoreboard = new ScoreboardScene();
         //Set Game variables
@@ -52,7 +53,15 @@ public class Game {
         this.lives = 3;
         this.isGameOver = false;
         //Load game UI
-        viewController.loadScene(scoreboard);
+
+        //Initialize collision handlers
+        AlienCollisionHandler alienCollisionHandler = new AlienCollisionHandler(this);
+        BunkerCollisionHandler bunkerCollisionHandler = new BunkerCollisionHandler(this);
+        PlayerCollisionHandler playerCollisionHandler = new PlayerCollisionHandler(this);
+
+        collisionHandler = alienCollisionHandler;
+        alienCollisionHandler.setNext(bunkerCollisionHandler);
+        bunkerCollisionHandler.setNext(playerCollisionHandler);
 
         //Initialize input handlers 
         ShootHandler shootHandler= new ShootHandler(player);
@@ -62,6 +71,9 @@ public class Game {
         inputHandler = shootHandler;
         shootHandler.setNext(moveLeftHandler);
         moveLeftHandler.setNext(moveRightHandler);
+
+        //UI object handler
+        //TODO: Add UI object handler
     }
 
     // Public static method to get the instance
@@ -90,6 +102,7 @@ public class Game {
 
     public void startGame() {
         // Initialize or reset game components
+        viewController.loadScene(scoreboard);
         player.resetPosition();
         alienSwarm = new AlienSwarm(currentLevel);
         projectiles.clear();
@@ -105,10 +118,6 @@ public class Game {
             // Game loop operations
             //Get player input
             // get input from the game framework
-            KeyCode keyPressed = viewController.getKeyPressed();
-            if(keyPressed != null){
-                inputHandler.handleRequest(keyPressed);
-            }
             //Update Objects
             handlePlayerInput(); // This would be linked to actual player input in the game framework
             updateGameObjects();
@@ -201,16 +210,35 @@ public class Game {
     }
 
     private void checkCollisions() {
-        // Handle collisions
-        //CollisionDetector.detectAndHandleCollisions(player, alienSwarm, projectiles, bunkers);
+        nestedLoop:
+        for (Projectile projectile : projectiles) {
+            for (Bunker bunker : bunkers) {
+                CollisionPair input = new CollisionPair         (projectile, (Collidable) bunker);
+                if(collisionHandler.handleRequest(input)){
+                    break nestedLoop;
+                }
+            }
+            for (Alien alien : alienSwarm.getAliens()) {
+                CollisionPair input = new CollisionPair(projectile, (Collidable) alien);
+                if(collisionHandler.handleRequest(input)){
+                    break nestedLoop;
+                }
+            }
+            if(collisionHandler.handleRequest(new CollisionPair(projectile, (Collidable) player))){
+                break nestedLoop;
+            }
+        }
     }
 
     private void handlePlayerInput() {
-        // This method should be connected to actual input handling in your game
-        // framework
-        // For example: if the left arrow key is pressed, then player.moveLeft();
+        KeyCode keyPressed = viewController.getKeyPressed();
+        if(keyPressed != null){
+            inputHandler.handleRequest(keyPressed);
+        }
+        viewController.handleMouseClick();
     }
 
     public void addScore(int points) {
+        score += points;
     }
 }

@@ -9,11 +9,12 @@ public class MoveRightHandler extends InputHandler{
     }
 
     @Override
-    public void handleRequest(KeyCode request) {
+    public boolean handleRequest(KeyCode request) {
         if (request == KeyCode.D || request == KeyCode.ARROW_RIGHT) {
             player.moveRight();
         } else if (getNext() != null) {
             getNext().handleRequest(request);
         }
+        return false;
     }
 }

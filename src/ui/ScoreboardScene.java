@@ -22,6 +22,7 @@ public class ScoreboardScene extends Scene{
 
     @Override
     public void update(Object... args) {
-        updateScoreboard((int)args[0], (int)args[1]);
+        scoreLabel.setText("Score: " + (int)args[0]);
+        livesLabel.setText("Lives: " + (int)args[1]);
     }
 }

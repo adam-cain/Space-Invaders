@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.Dimension;
 
+import ui.interfaces.ClickListener;
 import ui.uiObjects.*;
 import util.Image;
 
@@ -18,10 +19,10 @@ public class StartMenuScene extends Scene {
     private Label octopusLabel;
     private Label UFOLabel;
 
-    public StartMenuScene() {
+    public StartMenuScene(ClickListener startButtonListener) {
         Dimension windowSize = ViewController.getWindowSize();
 
-        startButton = new Button("startButton", 10, 10, 100, 20, "Start");
+        startButton = new StartButton("startButton", 10, 10, 100, 20, "Start", startButtonListener);
 
         titleImage = new UIImage("titleImage", 10, 10, new Image("src/assests/title.png", 100, 40));
         backgroundImage = new UIImage("backgroundImage", 0, 0, new Image("src/assests/background.png",windowSize.width, windowSize.height));
@@ -57,3 +58,20 @@ public class StartMenuScene extends Scene {
     }
     
 }
+
+class StartButton extends Button {
+    private ClickListener listener;
+
+    public StartButton(String name, int x, int y, int width, int height, String text, ClickListener listener) {
+        super(name, x, y, width, height, text);
+        this.listener = listener;
+    }
+
+    @Override
+    public void onClick() {
+        if (listener != null) {
+            listener.onClick();
+        }
+    }
+}
+

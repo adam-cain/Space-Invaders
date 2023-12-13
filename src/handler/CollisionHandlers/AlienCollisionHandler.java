@@ -11,7 +11,7 @@ public class AlienCollisionHandler extends CollisionHandler {
     }
 
     @Override
-    public void handleRequest(CollisionPair input) {
+    public boolean handleRequest(CollisionPair input) {
         if(input.getCollidable() instanceof Alien){
             Alien alien = (Alien) input.getCollidable();
             Projectile projectile = input.getProjectile();
@@ -19,11 +19,13 @@ public class AlienCollisionHandler extends CollisionHandler {
                 game.addPoints(alien.getPoints());
                 alien.hit();
                 removeProjectile(projectile);
+                return true;
             }
         }
         else if(getNext() != null){
-            getNext().handleRequest(input);
+            return getNext().handleRequest(input);
         }
+        return false;
     }
     
 }
