@@ -14,5 +14,4 @@ public class UIImage extends UIObject {
     public void render() {
         viewController.drawImage(image, x, y);
     }
-    // Add more methods specific to UIImage class
 }

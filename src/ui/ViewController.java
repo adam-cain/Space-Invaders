@@ -1,14 +1,18 @@
 package ui;
 
 import java.awt.Dimension;
+
+import handler.InputHandlers.KeyCode;
 import ui.uiObjects.*;
 import util.Image;
+import java.util.Random;
 
 public class ViewController {
     private static ViewController instance;
     private Scene scene;
 
-    private ViewController() {}
+    private ViewController() {
+    }
 
     public static ViewController getInstance() {
         if (instance == null) {
@@ -18,7 +22,7 @@ public class ViewController {
     }
 
     public void handleClick(int x, int y) {
-        if(scene != null) {
+        if (scene != null) {
             scene.handleClick(x, y);
         }
     }
@@ -28,19 +32,41 @@ public class ViewController {
     }
 
     public void drawImage(Image image, int x, int y) {
-        //Draw image at coordinates
+        // Draw image at coordinates
     }
 
     public void drawText(String text, int x, int y) {
-        //Draw text at coordinates
+        // Draw text at coordinates
     }
 
     public void clear() {
-        //Clear screen
+        // Clear screen
     }
 
     static public Dimension getWindowSize() {
         // Stub implementation returning a fixed window size
-        return new Dimension(800, 600); // Example size: 800 width x 600 height
+        // Example size: 800 width x 600 height
+        return new Dimension(800, 600);
+    }
+
+    public KeyCode getKeyPressed() {
+        // Stub implementation for getting key press from users.
+        // Returns a random keycode with higher chance of returning null
+        Random random = new Random();
+        int randomValue = random.nextInt(20); 
+        switch (randomValue) {
+            case 0:
+                return KeyCode.A;
+            case 1:
+                return KeyCode.ARROW_LEFT;
+            case 2:
+                return KeyCode.D;
+            case 3:
+                return KeyCode.ARROW_RIGHT;
+            case 4:
+                return KeyCode.SPACE;
+            default:
+                return null;
+        }
     }
 }

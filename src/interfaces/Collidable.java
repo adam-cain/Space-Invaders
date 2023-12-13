@@ -1,6 +1,6 @@
 package interfaces;
 
-import gameObjects.ProjectileObjects.Projectile;
+import gameObjects.Projectile;
 
 public interface Collidable extends Positionable {
     void handleCollision();

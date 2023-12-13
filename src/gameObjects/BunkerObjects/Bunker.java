@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gameObjects.GameObject;
+import gameObjects.Projectile;
 import gameObjects.BunkerObjects.BunkerShapes.BunkerShape;
-import gameObjects.ProjectileObjects.Projectile;
 import interfaces.Collidable;
 import util.Image;
 
@@ -23,7 +23,7 @@ public class Bunker {
         for (int i = 0; i < shape.getShapeWidth(); i++) {
             for (int j = 0; j < shape.getShapeWidth(); j++) {
                 if (shapeMatrix[i][j] == 1) {
-                    BunkerCube cube = new BunkerCube(x + i, y + j);
+                    BunkerCube cube = new BunkerCube(x + i + 10, y + j + 10);
                     cubes.add(cube);
                 }
             }
@@ -38,7 +38,7 @@ public class Bunker {
         }
     }
 
-    public void update(){
+    public void draw(){
         for (BunkerCube bunkerCube : cubes) {
             bunkerCube.draw();
         }
@@ -46,10 +46,12 @@ public class Bunker {
 
     class BunkerCube extends GameObject implements Collidable{
         public BunkerCube(int x, int y) {
-            super(x, y, new Image("src/assets/bunkerCube.png", 40, 40));
+            super(x, y, new Image("src/assets/bunkerCube.png", 10, 10));
         }
 
         @Override
-        public void handleCollision() {}
+        public void handleCollision() {
+            // Handled by superclass
+        }
     }
 }

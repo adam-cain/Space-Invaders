@@ -1,19 +1,19 @@
-package gameObjects.ProjectileObjects;
+package gameObjects;
 
 import java.awt.Dimension;
-import gameObjects.GameObject;
+
 import interfaces.Moving;
-import interfaces.ProjectileBehavior;
+import interfaces.MovementBehavior;
 import ui.ViewController;
 import util.Image;
 
 public class Projectile extends GameObject implements Moving {
 
-    private ProjectileBehavior behavior;
+    private MovementBehavior behavior;
     private GameObject shooter;
     private int projectileSpeed;
 
-    public Projectile(int xPosition, int yPosition, ProjectileBehavior behavior, int projectileSpeed, Image sprite, GameObject shooter) {
+    public Projectile(int xPosition, int yPosition, MovementBehavior behavior, int projectileSpeed, Image sprite, GameObject shooter) {
         super(xPosition, yPosition, sprite);
         this.behavior = behavior;
         this.shooter = shooter;

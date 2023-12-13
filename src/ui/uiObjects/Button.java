@@ -1,8 +1,8 @@
 package ui.uiObjects;
 
-import interfaces.Clickable;
+import ui.interfaces.Clickable;
 
-public class Button extends UIObject implements Clickable {
+abstract public class Button extends UIObject implements Clickable {
     private String text;
 
     public Button(String name, int x, int y, int width, int height, String text) {
@@ -16,9 +16,5 @@ public class Button extends UIObject implements Clickable {
     }
 
     @Override
-    public void onClick() {
-        // Handle button click event
-    }
-
-    // Add more methods specific to Button class
+    abstract public void onClick();
 }

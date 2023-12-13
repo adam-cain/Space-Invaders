@@ -28,5 +28,4 @@ public abstract class UIObject {
     }
 
     public abstract void render();
-    // Add more abstract methods or common functionality here
 }

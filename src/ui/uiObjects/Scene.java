@@ -2,7 +2,7 @@ package ui.uiObjects;
 import java.util.HashMap;
 import java.util.Map;
 
-import interfaces.Clickable;
+import ui.interfaces.Clickable;
 
 public abstract class Scene {
     protected Map<String, UIObject> uiObjects;

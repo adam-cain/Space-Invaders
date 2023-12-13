@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import factory.AlienFactory;
+import factory.AlienSwarmFactory;
 import factory.types.AlienType;
 import gameObjects.AlienObjects.ShootingAlien;
 import ui.ViewController;
@@ -43,19 +43,24 @@ public class AlienSwarm {
                 int yPosition = row * verticalSpacing;
 
                 if (row == 0) {
-                    alien = (ShootingAlien) AlienFactory.createAlien(AlienType.SQUID, xPosition, yPosition);
+                    alien = (ShootingAlien) AlienSwarmFactory.createAlien(AlienType.SQUID, xPosition, yPosition);
                 } else if (row == 1 || row == 2) {
-                    alien = (ShootingAlien) AlienFactory.createAlien(AlienType.CRAB, xPosition, yPosition);
+                    alien = (ShootingAlien) AlienSwarmFactory.createAlien(AlienType.CRAB, xPosition, yPosition);
                 } else {
-                    alien = (ShootingAlien) AlienFactory.createAlien(AlienType.OCTOPUS, xPosition, yPosition);
+                    alien = (ShootingAlien) AlienSwarmFactory.createAlien(AlienType.OCTOPUS, xPosition, yPosition);
                 }
                 aliens.add(alien);
             }
         }
-        updateSwarmEdges();
     }
 
-    public void moveSwarm() {
+    public void update() {
+        moveSwarm();
+        updateSwarmEdges();
+        randomShoot();
+    }
+
+    private void moveSwarm() {
         Dimension windowSize = ViewController.getWindowSize();
 
         int yDirection = 0;
@@ -72,7 +77,7 @@ public class AlienSwarm {
         }
     }
 
-    public void updateSwarmEdges() {
+    private void updateSwarmEdges() {
         for (ShootingAlien alien : aliens) {
             if (alien.getX() < leftEdgePos) {
                 leftEdgePos = alien.getX();
@@ -96,6 +101,13 @@ public class AlienSwarm {
     }
     
     public void randomShoot() {
+        Random random = new Random();
+        for (int i = 0; i < random.nextInt(1+currentLevel); i++) {
+            shootAlien();
+        }
+    }
+
+    private void shootAlien(){
         Random random = new Random();
         int shooterIndex = random.nextInt(aliens.size());
         ShootingAlien alien = aliens.get(shooterIndex);

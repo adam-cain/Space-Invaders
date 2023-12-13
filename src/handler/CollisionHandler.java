@@ -1,6 +1,6 @@
 package handler;
 
-import gameObjects.ProjectileObjects.Projectile;
+import gameObjects.Projectile;
 import interfaces.Collidable;
 import interfaces.Handler;
 
@@ -14,18 +14,15 @@ class CollisionPair {
     }
 }
 
-public class CollisionHandler implements Handler<CollisionPair> {
+public abstract class CollisionHandler implements Handler<CollisionPair> {
     private Handler<CollisionPair> next;
+
+    public CollisionHandler() {
+    }
     
     @Override
     public void setNext(Handler<CollisionPair> next) {
         this.next = next;
-    }
-
-    @Override
-    public boolean handleInput(CollisionPair input) {
-        // Handle the collision
-        return true;
     }
 
     @Override

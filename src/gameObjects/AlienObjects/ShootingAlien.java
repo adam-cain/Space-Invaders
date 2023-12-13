@@ -1,8 +1,8 @@
 package gameObjects.AlienObjects;
 
 import gameObjects.GameObject;
-import gameObjects.ProjectileObjects.ProjectileBehaviour.DownwardProjectileBehavior;
-import interfaces.ProjectileBehavior;
+import gameObjects.MovementBehavior.LinearDown;
+import interfaces.MovementBehavior;
 import interfaces.Shooting;
 import util.Image;
 
@@ -17,12 +17,12 @@ public abstract class ShootingAlien extends Alien implements Shooting{
     }
 
     @Override
-    public ProjectileBehavior getProjectileBehavior() {
-        return new DownwardProjectileBehavior();
+    public MovementBehavior getProjectileBehavior() {
+        return new LinearDown();
     }
 
     @Override
-    public Image getSprite() {
+    public Image getProjectileSprite() {
         return new Image("src/assets/alienProjectile.png", 10, 40);
     }
 }
