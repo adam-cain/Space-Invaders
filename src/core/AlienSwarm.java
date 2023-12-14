@@ -11,13 +11,21 @@ import gameObjects.AlienObjects.ShootingAlien;
 import ui.ViewController;
 
 public class AlienSwarm {
+    private static final int HORIZONTAL_SPACING = 20;
+    private static final int VERTICAL_SPACING = 40;
+    private static final int COLUMNS = 11;
+    private static final int ROWS = 5;
+    private static final int RIGHT_EDGE_MARGIN = 40;
+    private static final int LEFT_EDGE_MARGIN = 40;
+    private static final int BOTTOM_EDGE_MARGIN = 40;
+
     private List<ShootingAlien> aliens;
     private int currentLevel;
 
     // Swarm Edges
-    private int leftEdgePos = Integer.MAX_VALUE;
-    private int rightEdgePos = Integer.MIN_VALUE;
-    private int bottomEdgePos = Integer.MIN_VALUE;
+    private int leftEdgePos;
+    private int rightEdgePos;
+    private int bottomEdgePos;
 
     private int xDirection = 1;
 
@@ -32,27 +40,17 @@ public class AlienSwarm {
     }
 
     private void buildSwarm() {
-        int horizontalSpacing = 20;
-        int verticalSpacing = 40;
-        int columns = 11;
-        int rows = 5;
-
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < columns; col++) {
-                ShootingAlien alien;
-                int xPosition = col * horizontalSpacing;
-                int yPosition = row * verticalSpacing;
-
-                if (row == 0) {
-                    alien = (ShootingAlien) AlienSwarmFactory.createAlien(AlienType.SQUID, xPosition, yPosition);
-                } else if (row == 1 || row == 2) {
-                    alien = (ShootingAlien) AlienSwarmFactory.createAlien(AlienType.CRAB, xPosition, yPosition);
-                } else {
-                    alien = (ShootingAlien) AlienSwarmFactory.createAlien(AlienType.OCTOPUS, xPosition, yPosition);
-                }
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                ShootingAlien alien = createAlienForRow(row, col * HORIZONTAL_SPACING, row * VERTICAL_SPACING);
                 aliens.add(alien);
             }
         }
+    }
+
+    private ShootingAlien createAlienForRow(int row, int xPosition, int yPosition) {
+        AlienType type = (row == 0) ? AlienType.SQUID : (row <= 2) ? AlienType.CRAB : AlienType.OCTOPUS;
+        return (ShootingAlien) AlienSwarmFactory.createAlien(type, xPosition, yPosition);
     }
 
     public void update() {
@@ -63,33 +61,25 @@ public class AlienSwarm {
 
     private void moveSwarm() {
         Dimension windowSize = ViewController.getWindowSize();
-
         int yDirection = 0;
 
-        if (rightEdgePos >= windowSize.getWidth() - 40) {
-            xDirection = 1;
-            yDirection = 1;
-        } else if (leftEdgePos <= 40) {
+        if (rightEdgePos >= windowSize.getWidth() - RIGHT_EDGE_MARGIN) {
             xDirection = -1;
-            yDirection = 1;
+            yDirection = VERTICAL_SPACING;
+        } else if (leftEdgePos <= LEFT_EDGE_MARGIN) {
+            xDirection = 1;
+            yDirection = VERTICAL_SPACING;
         }
+
         for (ShootingAlien alien : aliens) {
-            alien.translate(xDirection * currentLevel, yDirection * currentLevel);
+            alien.translate(xDirection * currentLevel, yDirection);
         }
     }
 
     private void updateSwarmEdges() {
-        for (ShootingAlien alien : aliens) {
-            if (alien.getX() < leftEdgePos) {
-                leftEdgePos = alien.getX();
-            }
-            if (alien.getX() > rightEdgePos) {
-                rightEdgePos = alien.getX();
-            }
-            if (alien.getY() < bottomEdgePos) {
-                bottomEdgePos = alien.getY();
-            }
-        }
+        leftEdgePos = aliens.stream().mapToInt(ShootingAlien::getX).min().orElse(Integer.MAX_VALUE);
+        rightEdgePos = aliens.stream().mapToInt(ShootingAlien::getX).max().orElse(Integer.MIN_VALUE);
+        bottomEdgePos = aliens.stream().mapToInt(ShootingAlien::getY).max().orElse(Integer.MIN_VALUE);
     }
 
     public boolean allAliensDefeated() {
@@ -97,19 +87,21 @@ public class AlienSwarm {
     }
 
     public boolean swarmReachedBottom() {
-        int bottomEdge = (int) ViewController.getWindowSize().getHeight() - 40;
+        int bottomEdge = (int) ViewController.getWindowSize().getHeight() - BOTTOM_EDGE_MARGIN;
         return bottomEdgePos >= bottomEdge;
     }
 
     public void randomShoot() {
         Random random = new Random();
-        for (int i = 0; i < random.nextInt(1 + currentLevel); i++) {
-            shootAlien();
+        int shootCount = random.nextInt(1 + currentLevel);
+        for (int i = 0; i < shootCount; i++) {
+            if (!aliens.isEmpty()) {
+                shootAlien(random);
+            }
         }
     }
 
-    private void shootAlien() {
-        Random random = new Random();
+    private void shootAlien(Random random) {
         int shooterIndex = random.nextInt(aliens.size());
         ShootingAlien alien = aliens.get(shooterIndex);
         alien.shoot();
