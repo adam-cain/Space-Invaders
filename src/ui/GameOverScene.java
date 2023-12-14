@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.Dimension;
 
+import ui.interfaces.ClickListener;
 import ui.uiObjects.*;
 
 public class GameOverScene extends Scene {
@@ -10,7 +11,7 @@ public class GameOverScene extends Scene {
     private Label gameOverLabel;
     private Label finalScoreLabel;
 
-    public GameOverScene(int score) {
+    public GameOverScene(int score, ClickListener restartListener, ClickListener mainMenuListener) {
         Dimension windowSize = ViewController.getWindowSize();
 
         // Game Over Label
@@ -20,10 +21,10 @@ public class GameOverScene extends Scene {
         finalScoreLabel = new Label("finalScoreLabel", windowSize.width / 2 - 100, windowSize.height / 2 - 20, 200, 40, "Score: "+score);
 
         // Restart Button
-        restartButton = new restartButton("restartButton", windowSize.width / 2 - 100, windowSize.height / 2 + 20, 200, 40, "Restart");
+        restartButton = new RestartButton("restartButton", windowSize.width / 2 - 100, windowSize.height / 2 + 20, 200, 40, "Restart", restartListener);
 
         // Main Menu Button
-        mainMenuButton = new mainMenuButton("mainMenuButton", windowSize.width / 2 - 100, windowSize.height / 2 + 60, 200, 40, "Main Menu");
+        mainMenuButton = new MainMenuButton("mainMenuButton", windowSize.width / 2 - 100, windowSize.height / 2 + 60, 200, 40, "Main Menu", mainMenuListener);
 
         addUIObject(gameOverLabel);
         addUIObject(finalScoreLabel);
@@ -36,26 +37,34 @@ public class GameOverScene extends Scene {
     }
 }
 
-class restartButton extends Button{
-    public restartButton(String name, int x, int y, int width, int height, String text) {
+class RestartButton extends Button {
+    private ClickListener listener;
+
+    public RestartButton(String name, int x, int y, int width, int height, String text, ClickListener listener) {
         super(name, x, y, width, height, text);
+        this.listener = listener;
     }
 
     @Override
     public void onClick() {
-        // Restart Game
-        //TODO: Restart Game
+        if (listener != null) {
+            listener.onClick();
+        }
     }
 }
 
-class mainMenuButton extends Button{
-    public mainMenuButton(String name, int x, int y, int width, int height, String text) {
+class MainMenuButton extends Button {
+    private ClickListener listener;
+
+    public MainMenuButton(String name, int x, int y, int width, int height, String text, ClickListener listener) {
         super(name, x, y, width, height, text);
+        this.listener = listener;
     }
 
     @Override
     public void onClick() {
-        ViewController vc = ViewController.getInstance();
-        vc.loadScene(new StartMenuScene());
+        if (listener != null) {
+            listener.onClick();
+        }
     }
 }

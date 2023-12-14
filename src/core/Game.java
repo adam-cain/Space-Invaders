@@ -10,11 +10,13 @@ import gameObjects.Projectile;
 import gameObjects.AlienObjects.Alien;
 import gameObjects.AlienObjects.UFO;
 import gameObjects.BunkerObjects.Bunker;
+import gameObjects.BunkerObjects.BunkerShapes.ClassicShape;
 import handler.CollisionHandlers.*;
 import handler.InputHandlers.*;
 import interfaces.Collidable;
 import ui.ScoreboardScene;
 import ui.ViewController;
+import ui.interfaces.ClickListener;
 import ui.GameOverScene;
 
 
@@ -43,17 +45,6 @@ public class Game {
     private InputHandler inputHandler;
 
     private Game() {
-        //Initialize game objects
-        this.player = GameObjectFactory.createPlayer();
-        this.projectiles = new ArrayList<>();
-        this.scoreboard = new ScoreboardScene();
-        //Set Game variables
-        this.currentLevel = 1;
-        this.score = 0;
-        this.lives = 3;
-        this.isGameOver = false;
-        //Load game UI
-
         //Initialize collision handlers
         AlienCollisionHandler alienCollisionHandler = new AlienCollisionHandler(this);
         BunkerCollisionHandler bunkerCollisionHandler = new BunkerCollisionHandler(this);
@@ -100,29 +91,50 @@ public class Game {
         lives--;
     }
 
-    public void startGame() {
+    public int startGame() {
         // Initialize or reset game components
+        this.player = GameObjectFactory.createPlayer();
+        this.scoreboard = new ScoreboardScene();
+        this.projectiles = new ArrayList<>();
+        this.bunkers = new ArrayList<>();
+        
+        // Set Game variables
+        this.currentLevel = 1;
+        this.score = 0;
+        this.lives = 3;
+        this.isGameOver = false;
+    
         viewController.loadScene(scoreboard);
         player.resetPosition();
-        alienSwarm = new AlienSwarm(currentLevel);
-        projectiles.clear();
-        isGameOver = false;
-        currentLevel = 1;
-
-        // Start the main game loop
-        mainGameLoop();
+    
+        // Start the first level
+        startNextLevel();
+        return score;
     }
+
+    public void startNextLevel() {
+        // Prepare the game for the next level
+        alienSwarm = new AlienSwarm(currentLevel);
+        bunkers.clear();
+        bunkers.add(GameObjectFactory.createBunker(100, 500, new ClassicShape()));
+        bunkers.add(GameObjectFactory.createBunker(300, 500, new ClassicShape()));
+        bunkers.add(GameObjectFactory.createBunker(500, 500, new ClassicShape()));
+        projectiles.clear();
+    
+        // Start or resume the main game loop
+        if (!isGameOver) {
+            mainGameLoop();
+        }
+    }
+    
 
     private void mainGameLoop() {
         while (!isGameOver) {
             // Game loop operations
-            //Get player input
-            // get input from the game framework
             //Update Objects
             handlePlayerInput(); // This would be linked to actual player input in the game framework
             updateGameObjects();
             drawGameObjects();
-
             
             checkCollisions();
 
@@ -134,11 +146,12 @@ public class Game {
 
             //Check game logic for 
             checkEndOfLevel();
-            checkGameOver();
-            // Add a sleep or delay based on your game framework to control the loop timing
-
+            if (!player.isAlive() || alienSwarm.swarmReachedBottom()) {
+                break;
+            }
         }
-        endGame();
+        isGameOver = false;
+        return;
     }
 
     private void checkEndOfLevel() {
@@ -152,17 +165,6 @@ public class Game {
         if (!player.isAlive() || alienSwarm.swarmReachedBottom()) {
             isGameOver = true;
         }
-    }
-
-    private void startNextLevel() {
-        // Prepare the game for the next level
-        alienSwarm = new AlienSwarm(currentLevel);
-        //reset bunkers
-        // More level initialization as needed
-    }
-
-    private void endGame() {
-        viewController.loadScene(new GameOverScene(score));
     }
 
     private void updateGameObjects() {
