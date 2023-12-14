@@ -11,18 +11,15 @@ public class Main {
     public static void main(String[] args) {
         viewController = ViewController.getInstance();
         game = Game.getInstance();
-        while(true) {
-            loadStartMenuScene();
-        }
+        loadStartMenuScene();
     }
-
     public static void loadStartMenuScene() {
         ClickListener startButtonListener = new ClickListener() {
             @Override
             public void onClick() {
                 int finalScore = game.startGame(); // Start the game and get the final score
+                System.out.println("Final Score: " + finalScore);
                 loadGameOverScene(finalScore); // Load the game over scene with the final score
-                return;
             }
         };
         StartMenuScene startMenuScene = new StartMenuScene(startButtonListener);
@@ -33,20 +30,16 @@ public class Main {
         ClickListener restartButtonListener = new ClickListener() {
             @Override
             public void onClick() {
-                int finalScore = game.startGame(); // Start the game and get the final score
-                loadGameOverScene(finalScore); // Load the game over scene with the final score
-                return;
+                loadStartMenuScene(); // Reload the start menu scene
             }
         };
         ClickListener mainMenuButtonListener = new ClickListener() {
             @Override
             public void onClick() {
                 loadStartMenuScene(); // Load the start menu scene
-                return;
             }
         };
         GameOverScene gameOverScene = new GameOverScene(finalScore, restartButtonListener, mainMenuButtonListener);
         viewController.loadScene(gameOverScene);
     }
 }
-

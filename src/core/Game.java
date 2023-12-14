@@ -1,6 +1,5 @@
 package core;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,6 +112,7 @@ public class Game {
     }
 
     public void startNextLevel() {
+        this.currentLevel++;
         setupLevel();
         if (!isGameOver) {
             mainGameLoop();
@@ -123,6 +123,7 @@ public class Game {
         alienSwarm = new AlienSwarm(currentLevel);
         setupBunkers();
         projectiles.clear();
+        player.resetPosition();
     }
 
     private void setupBunkers() {
