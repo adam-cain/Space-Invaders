@@ -1,6 +1,5 @@
 package gameObjects;
 
-import java.awt.Dimension;
 import interfaces.Positionable;
 import ui.ViewController;
 import util.Image;

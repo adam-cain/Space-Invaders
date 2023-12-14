@@ -1,0 +1,77 @@
+**
+Open-Closed Principle (OCP) -- Marked where abstract classes exists for use in OCP
+Single Responsibility Principle (SRP)
+**
+
+Space Invaders/
+┣ core/
+┃ ┣ AlienSwarm.java -- SRP
+┃ ┗ Game.java --- Singleton, Chain of Responsibility (Implementation)
+┣ factory/
+┃ ┣ types/
+┃ ┃ ┗ AlienType.java
+┃ ┣ AlienSwarmFactory.java -- Factory Pattern, SRP
+┃ ┗ GameObjectFactory.java -- Factory Pattern, SRP
+┣ gameObjects/
+┃ ┣ AlienObjects/
+┃ ┃ ┣ Alien.java -- OCP, SRP
+┃ ┃ ┣ Crab.java -- SRP
+┃ ┃ ┣ Octopus.java -- SRP
+┃ ┃ ┣ ShootingAlien.java -- OCP, SRP
+┃ ┃ ┣ Squid.java -- SRP
+┃ ┃ ┗ UFO.java -- SRP
+┃ ┣ BunkerObjects/
+┃ ┃ ┣ BunkerShapes/
+┃ ┃ ┃ ┣ ArrowShape.java -- SRP
+┃ ┃ ┃ ┣ BunkerShape.java -- OCP, SRP
+┃ ┃ ┃ ┣ ClassicShape.java -- SRP
+┃ ┃ ┃ ┗ CubeShape.java -- SRP
+┃ ┃ ┗ Bunker.java -- SRP
+┃ ┣ MovementBehavior/
+┃ ┃ ┣ LinearDown.java -- SRP
+┃ ┃ ┣ LinearLeft.java -- SRP
+┃ ┃ ┣ LinearRight.java -- SRP
+┃ ┃ ┗ LinearUp.java -- SRP
+┃ ┣ GameObject.java -- OCP, SRP
+┃ ┣ Player.java -- SRP
+┃ ┗ Projectile.java -- SRP
+┣ handler/ -- Chain of Responsibility (Different handlers for each link in chain of responsibility)
+┃ ┣ CollisionHandlers/
+┃ ┃ ┣ AlienCollisionHandler.java -- SRP
+┃ ┃ ┣ BunkerCollisionHandler.java -- SRP
+┃ ┃ ┣ CollisionHandler.java -- OCP, SRP
+┃ ┃ ┣ CollisionPair.java -- SRP
+┃ ┃ ┗ PlayerCollisionHandler.java -- SRP
+┃ ┣ InputHandlers/
+┃ ┃ ┣ InputHandler.java -- SRP
+┃ ┃ ┣ KeyCode.java
+┃ ┃ ┣ MoveLeftHandler.java -- SRP
+┃ ┃ ┣ MoveRightHandler.java -- SRP
+┃ ┃ ┗ ShootHandler.java -- SRP
+┃ ┗ SoundHandler/
+┃   ┣ Sound.java -- SRP
+┃   ┗ SoundManager.java -- Singleton, SRP
+┣ interfaces/
+┃ ┣ Collidable.java
+┃ ┣ Handler.java -- Chain of Responsibility (Interface for links in chain)
+┃ ┣ MovementBehavior.java
+┃ ┣ Moving.java
+┃ ┣ Positionable.java
+┃ ┗ Shooting.java
+┣ ui/
+┃ ┣ interfaces/
+┃ ┃ ┣ Clickable.java
+┃ ┃ ┗ ClickListener.java
+┃ ┣ uiObjects/
+┃ ┃ ┣ Button.java -- OCP, SRP
+┃ ┃ ┣ Label.java -- SRP
+┃ ┃ ┣ Scene.java -- OCP, SRP
+┃ ┃ ┣ UIImage.java -- SRP
+┃ ┃ ┗ UIObject.java -- OCP, SRP
+┃ ┣ GameOverScene.java -- SRP
+┃ ┣ ScoreboardScene.java -- SRP
+┃ ┣ StartMenuScene.java  -- SRP
+┃ ┗ ViewController.java -- Singleton, SRP
+┣ util/
+┃ ┗ Image.java -- SRP
+┗ Main.java -- SRP
