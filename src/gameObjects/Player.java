@@ -9,12 +9,14 @@ import interfaces.Shooting;
 import ui.ViewController;
 import util.Image;
 public class Player extends GameObject implements Moving, Shooting{
-    private static Image sprite = new Image("src/assets/player.png", 40, 40);
-    private int moveSpeed = 5;
-    private int lives = 3;
+    private static final Image SPRITE = new Image("src/assets/player.png", 40, 40);
+    private static final int MOVE_SPEED = 5;
+    private static final Image PROJECTILE_SPRITE = new Image("src/assets/playerProjectile.png", 10, 40);
+    private static final int PROJECTILE_SPEED = 3;
 
+    private int lives = 3;
     public Player() {
-        super(0, -50, sprite);
+        super(0, -50, SPRITE);
     }
 
     public void resetPosition() {
@@ -25,28 +27,25 @@ public class Player extends GameObject implements Moving, Shooting{
     }
 
     public void moveLeft() {
-        if (getX() - moveSpeed > 0) {
-            translate(-moveSpeed, 0);
+        if (getX() - MOVE_SPEED > 0) {
+            translate(-MOVE_SPEED, 0);
         }
     }
 
     public void moveRight() {
         Dimension windowSize = ViewController.getWindowSize();
-        if (getX() + moveSpeed + getWidth() < windowSize.width) {
-            translate(moveSpeed, 0);
+        if (getX() + MOVE_SPEED + getWidth() < windowSize.width) {
+            translate(MOVE_SPEED, 0);
         }
     }
 
     public boolean isAlive() {
-        if (lives > 0) {
-            return true;
-        }
-        return false;
+        return lives > 0;
     }
 
     @Override
     public int getProjectileSpeed() {
-        return 3;
+        return PROJECTILE_SPEED;
     }
 
     @Override
@@ -66,6 +65,6 @@ public class Player extends GameObject implements Moving, Shooting{
 
     @Override
     public Image getProjectileSprite() {
-        return new Image("src/assets/playerProjectile.png", 10, 40);
+        return PROJECTILE_SPRITE;
     }
 }

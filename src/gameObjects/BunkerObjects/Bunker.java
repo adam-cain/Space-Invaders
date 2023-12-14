@@ -1,6 +1,7 @@
 package gameObjects.BunkerObjects;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import gameObjects.GameObject;
@@ -18,42 +19,44 @@ public class Bunker {
     }
 
     private void createBunkerCubes(int x, int y, BunkerShape shape) {
-        // Create individual bunker cubes and add them to the list
         int[][] shapeMatrix = shape.getShapeMatrix();
+        int cubeSize = 10; // Assuming cube size to be 10
         for (int i = 0; i < shape.getShapeWidth(); i++) {
-            for (int j = 0; j < shape.getShapeWidth(); j++) {
+            for (int j = 0; j < shape.getShapeHeight(); j++) { // Assuming height is different from width
                 if (shapeMatrix[i][j] == 1) {
-                    BunkerCube cube = new BunkerCube(x + i + 10, y + j + 10);
+                    BunkerCube cube = new BunkerCube(x + i * cubeSize, y + j * cubeSize);
                     cubes.add(cube);
                 }
             }
         }
     }
 
-    public boolean checkCollisions(Projectile projectile){
-        for (BunkerCube bunkerCube : cubes) {
+    public boolean checkCollisions(Projectile projectile) {
+        Iterator<BunkerCube> iterator = cubes.iterator();
+        while (iterator.hasNext()) {
+            BunkerCube bunkerCube = iterator.next();
             if (bunkerCube.collides(projectile)) {
-                cubes.remove(bunkerCube);
+                iterator.remove();
                 return true;
             }
         }
         return false;
     }
 
-    public void draw(){
+    public void draw() {
         for (BunkerCube bunkerCube : cubes) {
             bunkerCube.draw();
         }
     }
 
-    class BunkerCube extends GameObject implements Collidable{
+    class BunkerCube extends GameObject implements Collidable {
         public BunkerCube(int x, int y) {
             super(x, y, new Image("src/assets/bunkerCube.png", 10, 10));
         }
 
         @Override
         public void handleCollision() {
-            // Handled by superclass
+            // Collision handling logic
         }
     }
 }
