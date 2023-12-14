@@ -17,33 +17,36 @@ import interfaces.Collidable;
 import ui.ScoreboardScene;
 import ui.ViewController;
 
-
 public class Game {
     private static Game instance;
 
-    //Game objects
+    // Game objects
     private Player player;
     private AlienSwarm alienSwarm;
     private List<Projectile> projectiles;
     private List<Bunker> bunkers;
     private UFO ufo;
 
-    //Game states
+    // Game states
     private boolean isGameOver;
     private int currentLevel;
     private int score;
     private int lives;
 
-    //UI
+    // UI
     private ViewController viewController;
     private ScoreboardScene scoreboard;
 
-    //Handlers
+    // Handlers
     private CollisionHandler collisionHandler;
     private InputHandler inputHandler;
 
     private Game() {
-        //Initialize collision handlers
+        initializeHandlers();
+    }
+
+    private void initializeHandlers() {
+        // Initialize collision handlers
         AlienCollisionHandler alienCollisionHandler = new AlienCollisionHandler(this);
         BunkerCollisionHandler bunkerCollisionHandler = new BunkerCollisionHandler(this);
         PlayerCollisionHandler playerCollisionHandler = new PlayerCollisionHandler(this);
@@ -52,8 +55,8 @@ public class Game {
         alienCollisionHandler.setNext(bunkerCollisionHandler);
         bunkerCollisionHandler.setNext(playerCollisionHandler);
 
-        //Initialize input handlers 
-        ShootHandler shootHandler= new ShootHandler(player);
+        // Initialize input handlers
+        ShootHandler shootHandler = new ShootHandler(player);
         MoveLeftHandler moveLeftHandler = new MoveLeftHandler(player);
         MoveRightHandler moveRightHandler = new MoveRightHandler(player);
 
@@ -78,11 +81,11 @@ public class Game {
         projectiles.remove(projectile);
     }
 
-    public void addPoints(int score){
+    public void addPoints(int score) {
         this.score += score;
     }
 
-    public void removeLife(){
+    public void removeLife() {
         lives--;
     }
 
@@ -110,45 +113,39 @@ public class Game {
     }
 
     public void startNextLevel() {
-        // Prepare the game for the next level
-        alienSwarm = new AlienSwarm(currentLevel);
-        bunkers.clear();
-        bunkers.add(GameObjectFactory.createBunker(100, 500, new ClassicShape()));
-        bunkers.add(GameObjectFactory.createBunker(300, 500, new ClassicShape()));
-        bunkers.add(GameObjectFactory.createBunker(500, 500, new ClassicShape()));
-        projectiles.clear();
-    
-        // Start or resume the main game loop
+        setupLevel();
         if (!isGameOver) {
             mainGameLoop();
         }
     }
-    
+
+    private void setupLevel() {
+        alienSwarm = new AlienSwarm(currentLevel);
+        setupBunkers();
+        projectiles.clear();
+    }
+
+    private void setupBunkers() {
+        bunkers.clear();
+        bunkers.add(GameObjectFactory.createBunker(100, 500, new ClassicShape()));
+        bunkers.add(GameObjectFactory.createBunker(300, 500, new ClassicShape()));
+        bunkers.add(GameObjectFactory.createBunker(500, 500, new ClassicShape()));
+    }
 
     private void mainGameLoop() {
         while (!isGameOver) {
             // Game loop operations
-            //Update Objects
-            handlePlayerInput(); // This would be linked to actual player input in the game framework
+            handlePlayerInput();
             updateGameObjects();
             drawGameObjects();
-            
             checkCollisions();
-
-            //Clear Display
             viewController.clear();
-
-            //Draw
             scoreboard.updateScoreboard(score, lives);
-
-            //Check game logic for 
             checkEndOfLevel();
             if (!player.isAlive() || alienSwarm.swarmReachedBottom()) {
-                break;
+                isGameOver = true;
             }
         }
-        isGameOver = false;
-        return;
     }
 
     private void checkEndOfLevel() {
@@ -162,17 +159,17 @@ public class Game {
         // Update Projectiles
         for (Projectile projectile : projectiles) {
             projectile.update();
-            if(projectile.isOutOfBounds()){
+            if (projectile.isOutOfBounds()) {
                 projectiles.remove(projectile);
             }
         }
         // Update UFO
         if (ufo != null) {
             ufo.update();
-            if(ufo.isOutOfBounds()){
+            if (ufo.isOutOfBounds()) {
                 ufo = null;
             }
-        }else{
+        } else {
             if (Math.random() < 0.05) {
                 ufo = (UFO) GameObjectFactory.createUFO(currentLevel);
             }
@@ -181,7 +178,7 @@ public class Game {
         alienSwarm.update();
     }
 
-    private void drawGameObjects(){
+    private void drawGameObjects() {
         // Draw Projectiles
         for (Projectile projectile : projectiles) {
             projectile.draw();
@@ -192,32 +189,31 @@ public class Game {
         }
         // Draw Aliens
         for (Alien alien : alienSwarm.getAliens()) {
-           alien.draw();
+            alien.draw();
         }
         // Draw Bunkers
         for (Bunker bunker : bunkers) {
             bunker.draw();
         }
         // Draw Player
-       player.draw();
+        player.draw();
     }
 
     private void checkCollisions() {
-        nestedLoop:
-        for (Projectile projectile : projectiles) {
+        nestedLoop: for (Projectile projectile : projectiles) {
             for (Bunker bunker : bunkers) {
-                CollisionPair input = new CollisionPair         (projectile, (Collidable) bunker);
-                if(collisionHandler.handleRequest(input)){
+                CollisionPair input = new CollisionPair(projectile, (Collidable) bunker);
+                if (collisionHandler.handleRequest(input)) {
                     break nestedLoop;
                 }
             }
             for (Alien alien : alienSwarm.getAliens()) {
                 CollisionPair input = new CollisionPair(projectile, (Collidable) alien);
-                if(collisionHandler.handleRequest(input)){
+                if (collisionHandler.handleRequest(input)) {
                     break nestedLoop;
                 }
             }
-            if(collisionHandler.handleRequest(new CollisionPair(projectile, (Collidable) player))){
+            if (collisionHandler.handleRequest(new CollisionPair(projectile, (Collidable) player))) {
                 break nestedLoop;
             }
         }
@@ -225,7 +221,7 @@ public class Game {
 
     private void handlePlayerInput() {
         KeyCode keyPressed = viewController.getKeyPressed();
-        if(keyPressed != null){
+        if (keyPressed != null) {
             inputHandler.handleRequest(keyPressed);
         }
         viewController.handleMouseClick();

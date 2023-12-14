@@ -1,4 +1,5 @@
 package core;
+
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class AlienSwarm {
     private List<ShootingAlien> aliens;
     private int currentLevel;
 
-    //Swarm Edges
+    // Swarm Edges
     private int leftEdgePos = Integer.MAX_VALUE;
     private int rightEdgePos = Integer.MIN_VALUE;
     private int bottomEdgePos = Integer.MIN_VALUE;
@@ -68,7 +69,7 @@ public class AlienSwarm {
         if (rightEdgePos >= windowSize.getWidth() - 40) {
             xDirection = 1;
             yDirection = 1;
-        } else if (leftEdgePos <= 40 ) {
+        } else if (leftEdgePos <= 40) {
             xDirection = -1;
             yDirection = 1;
         }
@@ -91,7 +92,7 @@ public class AlienSwarm {
         }
     }
 
-    public boolean allAliensDefeated(){
+    public boolean allAliensDefeated() {
         return aliens.isEmpty();
     }
 
@@ -99,15 +100,15 @@ public class AlienSwarm {
         int bottomEdge = (int) ViewController.getWindowSize().getHeight() - 40;
         return bottomEdgePos >= bottomEdge;
     }
-    
+
     public void randomShoot() {
         Random random = new Random();
-        for (int i = 0; i < random.nextInt(1+currentLevel); i++) {
+        for (int i = 0; i < random.nextInt(1 + currentLevel); i++) {
             shootAlien();
         }
     }
 
-    private void shootAlien(){
+    private void shootAlien() {
         Random random = new Random();
         int shooterIndex = random.nextInt(aliens.size());
         ShootingAlien alien = aliens.get(shooterIndex);
