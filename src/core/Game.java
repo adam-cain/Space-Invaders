@@ -16,8 +16,6 @@ import handler.InputHandlers.*;
 import interfaces.Collidable;
 import ui.ScoreboardScene;
 import ui.ViewController;
-import ui.interfaces.ClickListener;
-import ui.GameOverScene;
 
 
 public class Game {
@@ -62,9 +60,6 @@ public class Game {
         inputHandler = shootHandler;
         shootHandler.setNext(moveLeftHandler);
         moveLeftHandler.setNext(moveRightHandler);
-
-        //UI object handler
-        //TODO: Add UI object handler
     }
 
     // Public static method to get the instance
@@ -92,24 +87,26 @@ public class Game {
     }
 
     public int startGame() {
-        // Initialize or reset game components
+        initializeGameComponents();
+        setGameVariables();
+        viewController.loadScene(scoreboard);
+        startNextLevel();
+        return score;
+    }
+
+    private void initializeGameComponents() {
         this.player = GameObjectFactory.createPlayer();
         this.scoreboard = new ScoreboardScene();
         this.projectiles = new ArrayList<>();
         this.bunkers = new ArrayList<>();
-        
-        // Set Game variables
+        player.resetPosition();
+    }
+
+    private void setGameVariables() {
         this.currentLevel = 1;
         this.score = 0;
         this.lives = 3;
         this.isGameOver = false;
-    
-        viewController.loadScene(scoreboard);
-        player.resetPosition();
-    
-        // Start the first level
-        startNextLevel();
-        return score;
     }
 
     public void startNextLevel() {
@@ -158,12 +155,6 @@ public class Game {
         if (alienSwarm.allAliensDefeated()) {
             currentLevel++;
             startNextLevel();
-        }
-    }
-
-    private void checkGameOver() {
-        if (!player.isAlive() || alienSwarm.swarmReachedBottom()) {
-            isGameOver = true;
         }
     }
 
