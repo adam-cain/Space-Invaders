@@ -12,10 +12,16 @@ import gameObjects.BunkerObjects.Bunker;
 import gameObjects.BunkerObjects.BunkerShapes.ClassicShape;
 import handler.CollisionHandlers.*;
 import handler.InputHandlers.*;
+import handler.SoundHandler.Sound;
+import handler.SoundHandler.SoundManager;
 import interfaces.Collidable;
 import ui.ScoreboardScene;
 import ui.ViewController;
 
+/**
+ * The Game class is the central class of the game, responsible for managing the game loop,
+ * game objects, state, and interactions between components.
+ */
 public class Game {
     private static Game instance;
 
@@ -44,6 +50,23 @@ public class Game {
         initializeHandlers();
     }
 
+    /**
+     * The getInstance() function returns the instance of the Game class, creating
+     * it if it doesn't already exist.
+     * 
+     * @return The method is returning an instance of the Game class.
+     */
+    public static Game getInstance() {
+        if (instance == null) {
+            instance = new Game();
+        }
+        return instance;
+    }
+
+    /**
+     * The function initializes collision handlers and input handlers, setting up a chain of
+     * responsibility pattern for handling collisions and input events.
+     */
     private void initializeHandlers() {
         // Initialize collision handlers
         AlienCollisionHandler alienCollisionHandler = new AlienCollisionHandler(this);
@@ -64,38 +87,63 @@ public class Game {
         moveLeftHandler.setNext(moveRightHandler);
     }
 
-    // Public static method to get the instance
-    public static Game getInstance() {
-        if (instance == null) {
-            instance = new Game();
-        }
-        return instance;
-    }
-
+    /**
+     * The addProjectile function adds a projectile to a list of projectiles.
+     * 
+     * @param projectile The "projectile" parameter is an object of the Projectile class.
+     */
     public void addProjectile(Projectile projectile) {
         projectiles.add(projectile);
     }
 
+    /**
+     * The removeProjectile function removes a given projectile from a list of
+     * projectiles.
+     * 
+     * @param projectile The "projectile" parameter is an object of the Projectile class that you want
+     * to remove from the "projectiles" collection.
+     */
     public void removeProjectile(Projectile projectile) {
         projectiles.remove(projectile);
     }
 
+    /**
+     * The addPoints function adds a given score to the current score.
+     * 
+     * @param score The score parameter is an integer value representing the number
+     *              of points to be
+     *              added to the current score.
+     */
     public void addPoints(int score) {
         this.score += score;
     }
 
+    /**
+     * The function removes one life from a player.
+     */
     public void removeLife() {
         lives--;
     }
 
+    /**
+     * The startGame function initializes game components, sets game variables,
+     * loads the scoreboard scene, starts the next level.
+     * 
+     * @return The method is returning an integer value, which is the score.
+     */
     public int startGame() {
         initializeGameComponents();
         setGameVariables();
         viewController.loadScene(scoreboard);
         startNextLevel();
+        SoundManager.playSound(Sound.EXPLOSION);
         return score;
     }
 
+    /**
+     * The function initializes the game components, including the player, scoreboard, projectiles, and
+     * bunkers, and resets the player's position.
+     */
     private void initializeGameComponents() {
         this.player = GameObjectFactory.createPlayer();
         this.scoreboard = new ScoreboardScene();
@@ -104,6 +152,10 @@ public class Game {
         player.resetPosition();
     }
 
+    /**
+     * The function sets the initial values for game variables such as currentLevel, score, lives, and
+     * isGameOver.
+     */
     private void setGameVariables() {
         this.currentLevel = 1;
         this.score = 0;
@@ -111,6 +163,10 @@ public class Game {
         this.isGameOver = false;
     }
 
+    /**
+     * The function starts the next level of the game and continues the main game loop if the game is
+     * not over.
+     */
     public void startNextLevel() {
         this.currentLevel++;
         setupLevel();
@@ -119,6 +175,10 @@ public class Game {
         }
     }
 
+    /**
+     * The function "setupLevel" initializes the game level by creating a new alien swarm, setting up
+     * bunkers, clearing projectiles, and resetting the player's position.
+     */
     private void setupLevel() {
         alienSwarm = new AlienSwarm(currentLevel);
         setupBunkers();
@@ -126,6 +186,10 @@ public class Game {
         player.resetPosition();
     }
 
+/**
+ * The function "setupBunkers" clears the "bunkers" list and adds three new bunkers to it with specific
+ * positions and shapes.
+ */
     private void setupBunkers() {
         bunkers.clear();
         bunkers.add(GameObjectFactory.createBunker(100, 500, new ClassicShape()));
@@ -133,6 +197,11 @@ public class Game {
         bunkers.add(GameObjectFactory.createBunker(500, 500, new ClassicShape()));
     }
 
+    /**
+     * The mainGameLoop function runs a continuous loop that handles player input, updates game
+     * objects, draws game objects, checks for collisions, updates the scoreboard, and checks for the
+     * end of the level until the game is over.
+     */
     private void mainGameLoop() {
         while (!isGameOver) {
             // Game loop operations
@@ -149,6 +218,10 @@ public class Game {
         }
     }
 
+    /**
+     * The function checks if all aliens have been defeated and if so, it increments the current level
+     * and starts the next level.
+     */
     private void checkEndOfLevel() {
         if (alienSwarm.allAliensDefeated()) {
             currentLevel++;
@@ -156,6 +229,10 @@ public class Game {
         }
     }
 
+    /**
+     * The function updates the game objects, including projectiles, UFOs, and aliens, by calling their
+     * respective update methods and removing any objects that are out of bounds.
+     */
     private void updateGameObjects() {
         // Update Projectiles
         for (Projectile projectile : projectiles) {
@@ -179,6 +256,10 @@ public class Game {
         alienSwarm.update();
     }
 
+    /**
+     * The function draws various game objects such as projectiles, UFO, aliens, bunkers, and the
+     * player.
+     */
     private void drawGameObjects() {
         // Draw Projectiles
         for (Projectile projectile : projectiles) {
@@ -200,6 +281,9 @@ public class Game {
         player.draw();
     }
 
+    /**
+     * Handles collisions between game objects.
+     */
     private void checkCollisions() {
         nestedLoop: for (Projectile projectile : projectiles) {
             for (Bunker bunker : bunkers) {
@@ -220,6 +304,9 @@ public class Game {
         }
     }
 
+    /**
+     * Handles player input for game control.
+     */
     private void handlePlayerInput() {
         KeyCode keyPressed = viewController.getKeyPressed();
         if (keyPressed != null) {
@@ -228,6 +315,11 @@ public class Game {
         viewController.handleMouseClick();
     }
 
+    /**
+     * Adds a specified number of points to the current score.
+     *
+     * @param points the number of points to add.
+     */
     public void addScore(int points) {
         score += points;
     }

@@ -10,6 +10,10 @@ import factory.types.AlienType;
 import gameObjects.AlienObjects.ShootingAlien;
 import ui.ViewController;
 
+/**
+ * Represents a swarm of alien objects in the game.
+ * Responsible for managing the positions, movements, and actions of the aliens.
+ */
 public class AlienSwarm {
     private static final int HORIZONTAL_SPACING = 20;
     private static final int VERTICAL_SPACING = 40;
@@ -29,12 +33,22 @@ public class AlienSwarm {
 
     private int xDirection = 1;
 
+    /**
+     * Constructs an AlienSwarm for a specified level.
+     *
+     * @param currentLevel The level of the game for which the swarm is created.
+     */
     public AlienSwarm(int currentLevel) {
         this.currentLevel = currentLevel;
         this.aliens = new ArrayList<>();
         buildSwarm();
     }
 
+    /**
+     * Retrieves the list of alien objects in the swarm.
+     *
+     * @return A list of ShootingAlien objects.
+     */
     public List<ShootingAlien> getAliens() {
         return aliens;
     }
@@ -53,6 +67,9 @@ public class AlienSwarm {
         return (ShootingAlien) AlienSwarmFactory.createAlien(type, xPosition, yPosition);
     }
 
+    /**
+     * Updates the state of the alien swarm, including movement, edge updates, and random shooting actions.
+     */
     public void update() {
         moveSwarm();
         updateSwarmEdges();
@@ -82,15 +99,28 @@ public class AlienSwarm {
         bottomEdgePos = aliens.stream().mapToInt(ShootingAlien::getY).max().orElse(Integer.MIN_VALUE);
     }
 
+    /**
+     * Checks if all aliens in the swarm have been defeated.
+     *
+     * @return True if all aliens are defeated, false otherwise.
+     */
     public boolean allAliensDefeated() {
         return aliens.isEmpty();
     }
 
+    /**
+     * Checks if the alien swarm has reached the bottom of the screen.
+     *
+     * @return True if the swarm has reached the bottom, false otherwise.
+     */
     public boolean swarmReachedBottom() {
         int bottomEdge = (int) ViewController.getWindowSize().getHeight() - BOTTOM_EDGE_MARGIN;
         return bottomEdgePos >= bottomEdge;
     }
 
+    /**
+     * Makes the aliens in the swarm shoot randomly.
+     */
     public void randomShoot() {
         Random random = new Random();
         int shootCount = random.nextInt(1 + currentLevel);

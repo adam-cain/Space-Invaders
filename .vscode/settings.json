@@ -5,5 +5,9 @@
         "lib/**/*.jar"
     ],
     "editor.wordWrap": "on",
-    "chat.editor.wordWrap": "on"
+    "chat.editor.wordWrap": "on",
+    "docwriter.style": "Auto-detect",
+    "docwriter.progress.trackMethods": true,
+    "docwriter.progress.trackClasses": true,
+    "docwriter.progress.trackTypes": true
 }

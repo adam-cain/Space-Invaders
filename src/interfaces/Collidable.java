@@ -2,9 +2,25 @@ package interfaces;
 
 import gameObjects.Projectile;
 
+/**
+ * An interface representing objects that can collide with others in a game.
+ * It extends the Positionable interface, adding collision handling capabilities.
+ */
 public interface Collidable extends Positionable {
+
+    /**
+     * Handles the collision event for the implementing object.
+     * This method should define the specific actions to take when a collision occurs.
+     */
     void handleCollision();
 
+    /**
+     * Checks if this object collides with a given projectile.
+     * The method uses the position and size of both this object and the projectile to determine if they intersect.
+     *
+     * @param object The projectile to check collision against.
+     * @return true if there is a collision, false otherwise.
+     */
     default boolean collides(Projectile object) {
         // Check if the right edge of 'this' is left of the left edge of 'object'
         if (getX() + getWidth() <= object.getX()) {
