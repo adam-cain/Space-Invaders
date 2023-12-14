@@ -1,7 +1,6 @@
 package gameObjects;
 
 import java.awt.Dimension;
-
 import interfaces.Moving;
 import interfaces.MovementBehavior;
 import ui.ViewController;
@@ -9,9 +8,9 @@ import util.Image;
 
 public class Projectile extends GameObject implements Moving {
 
-    private MovementBehavior behavior;
-    private GameObject shooter;
-    private int projectileSpeed;
+    private final MovementBehavior behavior;
+    private final GameObject shooter;
+    private final int projectileSpeed;
 
     public Projectile(int xPosition, int yPosition, MovementBehavior behavior, int projectileSpeed, Image sprite, GameObject shooter) {
         super(xPosition, yPosition, sprite);
@@ -27,6 +26,7 @@ public class Projectile extends GameObject implements Moving {
     public GameObject getShooter() {
         return shooter;
     }
+
 
     public boolean isOutOfBounds() {
         Dimension windowSize = ViewController.getWindowSize();
