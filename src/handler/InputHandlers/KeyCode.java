@@ -1,7 +1,7 @@
 package handler.InputHandlers;
 
 /**
- * Enum representing the key codes used for input handling in a game.
+ * Enum representing the key codes used for input handling in the game.
  * This set of key codes includes those commonly used for actions like shooting and moving.
  */
 public enum KeyCode {
